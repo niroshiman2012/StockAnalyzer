@@ -1,3 +1,4 @@
+# Add your details here
 
 login_details = {
     # use your own name, but I did not call this anywhere in the main script

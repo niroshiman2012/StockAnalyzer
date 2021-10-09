@@ -31,13 +31,6 @@ def get_news(TICKER):
 
     data = response.json()
 
-    # for article in data['articles']:
-    #     print('Date: '+article['publishedAt'])
-    #     print('Source: '+article['source']['name'])
-    #     print('Title: '+article['title'])
-    #     print('URL: '+article['url'])
-    #     print('\n')
-
     article_info = {} # creating an emtpy dictionary to store the each news result
     news = [] # info on each news results will be a separate dictionary by itself in this news list
     for article in data['articles']:  # go through each article i.e. each result to extract the below info
@@ -75,21 +68,13 @@ def get_stock_price(TICKER):
     data = response.json()
 
     last_price_d0 = data["Time Series (Daily)"]["2021-09-30"]["4. close"]
-    #print(last_price_d0)
 
     last_price_d1 = data["Time Series (Daily)"]["2021-09-29"]["4. close"]
-    #print(last_price_d1)
 
     price_diff_per = 100 * abs(float(last_price_d0) - float(last_price_d1))/float(last_price_d1)
-    #print(str(price_diff_per)+"%")
 
     news = get_news(TICKER)
 
-    # stock_price = {
-    #     "symbol":TICKER,
-    #     "last_price": last_price_d0,
-    #     "%_gain": price_diff_per,
-    # }
 
     ## PART 6: Creating a stock class
     class Stock:

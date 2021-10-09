@@ -52,7 +52,8 @@ def get_news(TICKER):
 
 
 ## PART 1: Function that obtains stock info and returns a class
-# TODO: introduce an API to extract fundamental data for the stock
+# TODO: introduce an API to extract fundamental data for the stock (DONE)
+# TODO: combine the 5 functions below for collecting fundamental data to prevent redundancy
 def get_stock_data(TICKER):
 
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
@@ -64,20 +65,13 @@ def get_stock_data(TICKER):
         "apikey": login_details["STOCK_API_KEY"],
     }
 
-    # Parameters for stock's fundamental data
-    parameters_stock_fdata = {
-        "function": "OVERVIEW",
-        "symbol": TICKER,
-        "apikey": login_details["STOCK_API_KEY"],
-    }
-
     response = requests.get(STOCK_ENDPOINT, params=parameters_stock)
     response.raise_for_status()
     data = response.json()
 
     # TODO: the dates on which price data is collected should automatically refer to the latest dates
-    last_price_d0 = data["Time Series (Daily)"]["2021-09-30"]["4. close"]
-    last_price_d1 = data["Time Series (Daily)"]["2021-09-29"]["4. close"]
+    last_price_d0 = data["Time Series (Daily)"]["2021-10-08"]["4. close"]
+    last_price_d1 = data["Time Series (Daily)"]["2021-10-07"]["4. close"]
 
     price_diff_per = 100 * abs(float(last_price_d0) - float(last_price_d1))/float(last_price_d1)
 
@@ -91,6 +85,74 @@ def get_stock_data(TICKER):
     }
 
 
+def get_stock_overview(TICKER):
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's fundamental data
+    parameters_stock_overview = {
+        "function": "OVERVIEW",
+        "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock_overview)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
+def get_stock_incomeStatement(TICKER):
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's fundamental data
+    parameters_stock_overview = {
+        "function": "INCOME_STATEMENT",
+        "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock_overview)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
+def get_stock_balanceSheet(TICKER):
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's fundamental data
+    parameters_stock_overview = {
+        "function": "BALANCE_SHEET",
+        "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock_overview)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
+def get_stock_cashFlow(TICKER):
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's fundamental data
+    parameters_stock_overview = {
+        "function": "CASH_FLOW",
+        "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock_overview)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
 ## PART 6: Creating a stock class
 class Stock:
     def __init__(self, symbol, lastPrice, d1_gain, news):
@@ -100,9 +162,7 @@ class Stock:
         self.news = news
 
 
-
 ## Testing Code Below
-
 stock_data = get_stock_data("TSLA") # stock_data assumes a dictionary
 
 # creating a class for that stock using the dictionary above

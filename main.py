@@ -52,13 +52,21 @@ def get_news(TICKER):
 
 
 ## PART 1: Function that obtains stock info and returns a class
-# TODO: split extracting stock price and creating class
-def get_stock_price(TICKER):
+# TODO: introduce an API to extract fundamental data for the stock
+def get_stock_data(TICKER):
 
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
 
+    # Parameters for stock's price data
     parameters_stock = {
         "function": "TIME_SERIES_DAILY",
+        "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    # Parameters for stock's fundamental data
+    parameters_stock_fdata = {
+        "function": "OVERVIEW",
         "symbol": TICKER,
         "apikey": login_details["STOCK_API_KEY"],
     }
@@ -67,29 +75,39 @@ def get_stock_price(TICKER):
     response.raise_for_status()
     data = response.json()
 
+    # TODO: the dates on which price data is collected should automatically refer to the latest dates
     last_price_d0 = data["Time Series (Daily)"]["2021-09-30"]["4. close"]
-
     last_price_d1 = data["Time Series (Daily)"]["2021-09-29"]["4. close"]
 
     price_diff_per = 100 * abs(float(last_price_d0) - float(last_price_d1))/float(last_price_d1)
 
     news = get_news(TICKER)
 
-
-    ## PART 6: Creating a stock class
-    class Stock:
-        def __init__(self, symbol, lastPrice, d1_gain, news):
-            self.symbol = symbol
-            self.lastPrice = lastPrice
-            self.d1_gain = d1_gain
-            self.news = news
-
-    return (
-       Stock(TICKER, last_price_d1, price_diff_per, news)
-             )
+    return {
+        "symbol" : TICKER,
+        "lastPrice" : last_price_d1,
+        "d1_gain" : price_diff_per,
+        "news" : news
+    }
 
 
-TSLA = get_stock_price("TSLA")
+## PART 6: Creating a stock class
+class Stock:
+    def __init__(self, symbol, lastPrice, d1_gain, news):
+        self.symbol = symbol
+        self.lastPrice = lastPrice
+        self.d1_gain = d1_gain
+        self.news = news
+
+
+
+## Testing Code Below
+
+stock_data = get_stock_data("TSLA") # stock_data assumes a dictionary
+
+# creating a class for that stock using the dictionary above
+TSLA = Stock(stock_data["symbol"],stock_data["lastPrice"],stock_data["d1_gain"],stock_data["news"])
+
 print(TSLA.symbol)
 print(TSLA.lastPrice)
 print(TSLA.d1_gain)

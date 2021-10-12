@@ -3,7 +3,7 @@
 #          Visit alphavantage.com to get your stock api key and refer to the documentation to extract any data they provide
 #          Visit newsapi.org to get your news api key and refer to the documentation for further info on their data
 #          All your login details/ api keys should go into the myModule sheet and not the main script
-# BRANCH : 01
+# BRANCH : 02
 
 import requests
 import smtplib
@@ -191,14 +191,5 @@ print(TSLA.news)
 
 
 ## Testing code
-
-
-
-
-
-
-
-
-
 
 

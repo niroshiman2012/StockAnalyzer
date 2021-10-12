@@ -1,4 +1,6 @@
-# Add your details here...branch 2 says hi
+# AUTHOR : NIROSHIMAN BALASUBRAMANIAM
+# DECRIP : All login details for APIs or emails should go in this script only, keep it private
+# BRANCH : 02
 
 login_details = {
     # use your own name, but I did not call this anywhere in the main script

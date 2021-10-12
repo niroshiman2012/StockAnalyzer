@@ -1,6 +1,6 @@
 # AUTHOR : NIROSHIMAN BALASUBRAMANIAM
 # DECRIP : This is a function that searches for stock related news
-#          Documentation at https://newsapi.org/docs/endpoints/everything
+#          Documentation can be found at https://newsapi.org/docs/endpoints/everything
 # BRANCH : 02
 
 import requests

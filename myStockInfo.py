@@ -79,7 +79,7 @@ def get_stock_cashFlow(TICKER):
     return data
 
 
-def get_stock_data(TICKER):
+def get_stock_dailyPrice(TICKER):
 
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
 
@@ -87,6 +87,27 @@ def get_stock_data(TICKER):
     parameters_stock = {
         "function": "TIME_SERIES_DAILY",
         "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
+def get_stock_EMA(TICKER,TIME_PERIOD):
+
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's price data
+    parameters_stock = {
+        "function": "EMA",
+        "symbol": TICKER,
+        "interval": "daily",
+        "time_period": TIME_PERIOD,
+        "series_type": "close",
         "apikey": login_details["STOCK_API_KEY"],
     }
 

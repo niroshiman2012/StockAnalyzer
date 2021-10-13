@@ -21,12 +21,8 @@ yesterday = date.today() - timedelta(days=2)
 yyesterday = date.today() - timedelta(days=3)
 
 
-# RUN TESTs BELOW
-TICKER = "TSLA"
-point = 0
-
-# check for significant % daily gain and volume change
-def test_dailyPrice(TICKER, point):
+# TEST 01 : Daily Price
+def test01_dailyPrice(TICKER, point):
 
     # E.g.:
     # "2021-10-11": {
@@ -56,38 +52,59 @@ def test_dailyPrice(TICKER, point):
     if (gainPercent > 5.0) and volChange > 0:
         point += 1
 
-    return point
-
-print(test_dailyPrice(TICKER,point))
+    return yclose, point # returns a tuple
 
 
-# check if the stock is on a golden cross
-def test_goldenCross(TICKER, point):
+# TEST 02 : EMA
+def test02_EMA(TICKER, point, yclose):
     EMA20 = get_stock_EMA(TICKER,"20")["Technical Analysis: EMA"] # EMA20
     EMA50 = get_stock_EMA(TICKER, "50")["Technical Analysis: EMA"] # EMA50
+    EMA200 = get_stock_EMA(TICKER, "200")["Technical Analysis: EMA"] # EMA200
 
-    yEMA20 = EMA20[str(yesterday)]["EMA"]
-    yEMA50 = EMA50[str(yyesterday)]["EMA"]
+    yEMA20 = float(EMA20[str(yesterday)]["EMA"])
+    yEMA50 = float(EMA50[str(yyesterday)]["EMA"])
+    yEMA200 = float(EMA200[str(yyesterday)]["EMA"])
 
+    # Check for Golden Cross using short term and mid term EMA
     if yEMA20 > yEMA50:
         point += 1
 
+    # Check if stock on up trend
+    if yclose > yEMA20: # Short-term
+        point += 1
+        print("EMA20 Check")
+
+    if yclose > yEMA50: # Mid-term
+        point += 1
+        print("EMA50 Check")
+
+    if yclose > yEMA200: # Long-term
+        point +=1
+        print("EMA200 Check")
+
     return point
 
-print(test_goldenCross(TICKER,point))
+
+
+## Call the test functions below
+TICKER = "TSLA"
+point = 0
+
+yclose, point = test01_dailyPrice(TICKER, point)
+
+result = test02_EMA("TSLA", point, yclose)
+print(result)
 
 
 
-##
 
-
-
-# Creating a stock class
+# #Creating a stock class
 # class Stock:
-#     def __init__(self, symbol, lastPrice, d1_gain):
+#     def __init__(self, symbol, lastPrice, point):
 #         self.symbol = symbol
 #         self.lastPrice = lastPrice
-#         self.d1_gain = d1_gain
+#         self.point = point
+
 
 
 

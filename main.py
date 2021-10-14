@@ -10,8 +10,10 @@ import requests
 
 from myModule import login_details # importing login details needed for API and Email services
 from myNews import get_news # importing function that can get stock related news
-from myStockInfo import get_stock_overview, get_stock_incomeStatement, get_stock_cashFlow, get_stock_balanceSheet, \
-    get_stock_dailyPrice, get_stock_EMA
+from myStockInfo import get_stock_overview, get_stock_incomeStatement, \
+    get_stock_cashFlow, get_stock_balanceSheet, \
+    get_stock_dailyPrice, get_stock_EMA, get_stock_RSI, \
+    get_stock_WMA
 from myAlert import send_email
 
 from datetime import date, timedelta
@@ -41,18 +43,20 @@ def test01_dailyPrice(TICKER, point):
     yclose = float(ydata["4. close"])
     yyclose = float(yydata["4. close"])
 
+    print("Last Price: " + str(yclose))
+
     yvol = float(ydata["5. volume"])
     yyvol = float(yydata["5. volume"])
 
     gainPercent = 100 * (yclose - yyclose) / yclose
     volChange = yvol - yyvol
-    print(round(gainPercent,2))
-    print(volChange)
+    print("Gain Percent: " + str(round(gainPercent,2)))
+    print("Vol Change: " + str(volChange))
 
     if (gainPercent > 5.0) and volChange > 0:
         point += 1
 
-    return yclose, point # returns a tuple
+    return yclose, point  # returns a tuple
 
 
 # TEST 02 : EMA
@@ -62,8 +66,8 @@ def test02_EMA(TICKER, point, yclose):
     EMA200 = get_stock_EMA(TICKER, "200")["Technical Analysis: EMA"] # EMA200
 
     yEMA20 = float(EMA20[str(yesterday)]["EMA"])
-    yEMA50 = float(EMA50[str(yyesterday)]["EMA"])
-    yEMA200 = float(EMA200[str(yyesterday)]["EMA"])
+    yEMA50 = float(EMA50[str(yesterday)]["EMA"])
+    yEMA200 = float(EMA200[str(yesterday)]["EMA"])
 
     # Check for Golden Cross using short term and mid term EMA
     if yEMA20 > yEMA50:
@@ -79,21 +83,68 @@ def test02_EMA(TICKER, point, yclose):
         print("EMA50 Check")
 
     if yclose > yEMA200: # Long-term
-        point +=1
+        point += 1
         print("EMA200 Check")
 
     return point
 
+
+# TEST 03 : WMA
+def test03_WMA(TICKER, point, yclose):
+
+    WMA = get_stock_WMA(TICKER, "20")
+    yWMA = float(WMA["Technical Analysis: WMA"][str(yesterday)]["WMA"])
+
+    if yclose > yWMA:
+        point += 1
+        print("WMA200 Check")
+
+    return point
+
+
+# TEST04 : MACD
+
+
+# TEST05 : STOCHASTIC OSCILLATOR
+
+
+# TEST06 : RSI
+def test06_RSI(TICKER, point):
+
+    RSI = get_stock_RSI(TICKER, "14")
+    print(RSI)
+    yRSI = float(RSI["Technical Analysis: RSI"][str(yesterday)]["RSI"])
+
+    if yRSI > 65:
+        point += 1
+        print("RSI Check")
+
+    return point
+
+
+# TEST07 : MOM
+
+
+# TEST08 : MFI
+
+
+# TEST09 : BBANDS
 
 
 ## Call the test functions below
 TICKER = "TSLA"
 point = 0
 
+# Alpha Vantage limits free API calls frequency to 5 calls / min and 500 calls / day
 yclose, point = test01_dailyPrice(TICKER, point)
 
-result = test02_EMA("TSLA", point, yclose)
-print(result)
+point = test02_EMA(TICKER, point, yclose)
+
+point = test03_WMA(TICKER, point, yclose)
+
+point = test06_RSI(TICKER, point)
+
+print("Point: " + str(point))
 
 
 

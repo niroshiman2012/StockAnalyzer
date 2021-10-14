@@ -116,3 +116,45 @@ def get_stock_EMA(TICKER,TIME_PERIOD):
     data = response.json()
 
     return data
+
+
+def get_stock_RSI(TICKER, TIME_PERIOD):
+
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's price data
+    parameters_stock = {
+        "function": "RSI",
+        "symbol": TICKER,
+        "interval": "daily",
+        "time_period": TIME_PERIOD,
+        "series_type": "close",
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
+def get_stock_WMA(TICKER, TIME_PERIOD):
+
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's price data
+    parameters_stock = {
+        "function": "WMA",
+        "symbol": TICKER,
+        "interval": "daily",
+        "time_period": TIME_PERIOD,
+        "series_type": "close",
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock)
+    response.raise_for_status()
+    data = response.json()
+
+    return data

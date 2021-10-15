@@ -1,6 +1,6 @@
 # AUTHOR : NIROSHIMAN BALASUBRAMANIAM
 # DECRIP : This is a function that searches for stock info related to the stock's background, financial statements,
-#          stock price and etc
+#          stock price and etc using API requests
 #          Documentation at https://newsapi.org/docs/endpoints/everything
 # BRANCH : 02
 
@@ -24,7 +24,25 @@ def get_stock_overview(TICKER):
 
     return data
 
+def get_stock_dailyPrice(TICKER):
 
+    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+
+    # Parameters for stock's price data
+    parameters_stock = {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": TICKER,
+        "apikey": login_details["STOCK_API_KEY"],
+    }
+
+    response = requests.get(STOCK_ENDPOINT, params=parameters_stock)
+    response.raise_for_status()
+    data = response.json()
+
+    return data
+
+
+## FUNDAMENTAL ANALYSIS DATA
 # Gets income statement of the stock
 def get_stock_incomeStatement(TICKER):
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
@@ -79,23 +97,7 @@ def get_stock_cashFlow(TICKER):
     return data
 
 
-def get_stock_dailyPrice(TICKER):
-
-    STOCK_ENDPOINT = "https://www.alphavantage.co/query"
-
-    # Parameters for stock's price data
-    parameters_stock = {
-        "function": "TIME_SERIES_DAILY",
-        "symbol": TICKER,
-        "apikey": login_details["STOCK_API_KEY"],
-    }
-
-    response = requests.get(STOCK_ENDPOINT, params=parameters_stock)
-    response.raise_for_status()
-    data = response.json()
-
-    return data
-
+## TECHNICAL ANALYSIS DATA
 
 def get_stock_EMA(TICKER,TIME_PERIOD):
 

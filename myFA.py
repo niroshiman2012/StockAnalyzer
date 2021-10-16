@@ -5,18 +5,54 @@
 
 from myStockInfo import get_stock_incomeStatement, get_stock_balanceSheet, get_stock_cashFlow
 
-def testFA01(TICKER):
+def testFA01_IncomeStatement(TICKER, annual):
 
     data = get_stock_incomeStatement(TICKER)
+    print(data)
 
-    return data
+    if annual == True:
+        # Annual Report
+        reports = data["annualReports"]  # returns an array with dictionaries of different fiscal dates
+    else:
+        # Quarterly Report
+        reports = data["quarterlyReports"]  # returns an array with dictionaries of different fiscal dates
+
+    print("Fr. Income Statement")
+    for report in reports:
+        print(report["fiscalDateEnding"])
+
+        # calculate : Revenue
+        revenue = float(report["totalRevenue"])
+        print(round(revenue,2))
+
+        # calculate : Gross Profit Margin
+        grossMargin = (float(report["totalRevenue"]) - float(report["costOfRevenue"]))/float(report["totalRevenue"])
+        print(round(grossMargin,2))
+
+        # calculate : Net income
+        netIncome = float(report["netIncome"])
+        print(round(netIncome,2))
+
+        # calculate : Earnings Per Share (EPS)
+        eps = netIncome / 960000000 # (net income) / outstanding shares
+        print(round(eps,2))
+
+        # calculate : Price-Earnings Ratio (PE)
+        # = share price / EPS
+
+        # calculate : Return on Equity (ROE)
+        roe = netIncome / 22225000000 # = net income / shareholder equity
+        print(round(roe,2))
+
+        print("\n")
 
 
-def testFA02_BalanceSheet(TICKER,type):
+def testFA02_BalanceSheet(TICKER, annual):
 
     data = get_stock_balanceSheet(TICKER)
+    print(data)
 
-    if type == True:
+    if annual == True:
         # Annual Report
         reports = data["annualReports"]  # returns an array with dictionaries of different fiscal dates
     else:

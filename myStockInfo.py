@@ -98,7 +98,7 @@ def get_stock_cashFlow(TICKER):
 
 
 ## TECHNICAL ANALYSIS DATA
-
+# Get EMA of the stock
 def get_stock_EMA(TICKER,TIME_PERIOD):
 
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
@@ -120,6 +120,7 @@ def get_stock_EMA(TICKER,TIME_PERIOD):
     return data
 
 
+# Get RSI of the stock
 def get_stock_RSI(TICKER, TIME_PERIOD):
 
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
@@ -141,6 +142,7 @@ def get_stock_RSI(TICKER, TIME_PERIOD):
     return data
 
 
+# Get WMA of the stock
 def get_stock_WMA(TICKER, TIME_PERIOD):
 
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"

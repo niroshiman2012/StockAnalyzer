@@ -12,7 +12,7 @@ from myModule import login_details # importing login details needed for API and 
 from myNews import get_news # importing function that can get stock related news
 
 from myTA import test01_dailyPrice, test02_EMA, test03_WMA, test06_RSI
-from myFA import testFA01, testFA02, testFA03
+from myFA import testFA01, testFA02_BalanceSheet, testFA03
 
 from myAlert import send_email
 
@@ -25,7 +25,10 @@ point = 0
 
 # FUNDAMENTAL ANALYSIS TESTS
 # print(testFA01(TICKER))
-# print(testFA02(TICKER))
+
+# Financial Ratios : Balance Sheet
+testFA02_BalanceSheet(TICKER, True) # 2nd Parameter; True for AR and False for QR
+
 # print(testFA03(TICKER))
 
 # TECHNICAL ANALYSIS TESTS
